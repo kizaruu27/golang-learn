@@ -191,4 +191,29 @@ func main() {
 
 	myValue %= 5
 	fmt.Println("Modulus assignment: ", myValue)
+
+	// -- Logical Operator --
+	var isValid bool = true
+	var isCorrect bool = false
+
+	fmt.Println(isValid || isCorrect)
+	fmt.Println(isValid && !isCorrect)
+
+	// -- Comparison Operator --
+	var myAnotherValue1 int = 50
+	var myAnotherValue2 int = 50
+	fmt.Println("== ", myAnotherValue1 == myAnotherValue2)
+	fmt.Println("!= ", myAnotherValue1 != myAnotherValue2)
+	fmt.Println("> ", myAnotherValue1 > myAnotherValue2)
+	fmt.Println(">= ", myAnotherValue1 >= myAnotherValue2)
+	fmt.Println("<= ", myAnotherValue1 <= myAnotherValue2)
+	fmt.Println("< ", myAnotherValue1 < myAnotherValue2)
+
+	// --- Comparison Using String ---
+	// ? Untuk pembandingan menggunakan tipe data string sebagai pembanding, yang akan dibandingkan adalah urutan lexical dari ACII
+	// ? Urutannya: 0-9 -> A-Z -> a-z
+	var comparedString1 string = "AkuSeorangKapiten"
+	var comparedString2 string = "mempunyaiPedangPanjang"
+	fmt.Println(comparedString1 > comparedString2)
+	fmt.Println(comparedString1 < comparedString2)
 }
