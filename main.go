@@ -1,219 +1,99 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
+// [FUNCTION]
+// -- Function Init --
+// ? Function yang akan dipanggil sebelum menjalankan function main() / entry point
+// ? Jika terdapat lebih dari 1 init, maka akan dieksekusi secara berurutan
+func init() {
+	fmt.Println("Hello, from init() 1")
+}
+
+func init() {
+	fmt.Println("Hello, from init() 2")
+}
+
+// -- Function main() --
+// ? Function yang merupakan entry point ketika program dijalankan
 func main() {
-	// [TIPE DATA GOLANG]
-	// -- Boolean --
-	fmt.Println(true)
-	fmt.Println(false)
+	printHello()
+	sumValue(10, 50)
 
-	// -- String --
-	fmt.Println("Hallo, Dunia!")
-	fmt.Println(`Code with "Golang"`)
+	// Memanggil return function
+	generatedMessage := generateMessage()
+	fmt.Println(generatedMessage)
 
-	// -- Numeric --
-	fmt.Println(123)
-	fmt.Println(10 + 10)
+	// Memanggil return function dengan parameter
+	speed := calculateSpeed(4.0, 9.8, 320.0)
+	fmt.Println(speed)
 
-	// [STRING FORMATTING]
-	fmt.Println("Umur saya saat ini ", 25)
-	fmt.Printf("Saat ini saya berada di %v \n", "Jakarta")
-	var message = fmt.Sprintf("Berat badan saya saat ini %dkg, Saat ini saya berusia %d tahun", 90, 20) // Sprintf dapat digunakan untuk menyimpan output value ke dalam sebuah variable
-	fmt.Println(message)
+	userMessage := getUsername("kizaruu77")
+	fmt.Println(userMessage)
 
-	// -- Flag --
-	// %v: Nilai dengan tipe data apapun
-	fmt.Printf("Saya saat ini sudah memiliki %v anak, dan rumah di daerah %v \n", 10, "Pondok Indah")
-	// %T: Untuk menampilkan nama tipe data dari suatu value/variable
-	fmt.Printf("%T \n", false)
-	// %t Menampilkan booelan
-	fmt.Printf("Balon itu hijau: %t \n", false)
-	// %s Menampilkan string
-	fmt.Printf("Halo, nama saya: %s \n", "Eko Kamirudin")
-	// %d Menampilkan integer
-	fmt.Printf("Sekarang umur saya %d tahun \n", 10)
-	// %b Menampilkan binary dari integer
-	fmt.Printf("Value binary: %b \n", 100)
-	// %o Menampilkan oktal dari integer
-	fmt.Printf("Value oktal: %o \n", 100)
-	// %x Menampilkan oktal dari integer
-	fmt.Printf("Value hexadecimal: %x \n", 100000)
-	// %e Menampilkan nilai eksponen dari float
-	fmt.Printf("Value exponent: %e \n", 30.5)
-	// %f Menampilkan float
-	fmt.Printf("Jari-jari lingkaran: %f \n", 3.14)
-	// %q Menampilkan quote/petik dua
-	fmt.Printf("Selalu bilang %q \n", "Maaf")
-
-	// -- ESCAPE CHARACTER --
-	// \t Untuk memberikan 1 tab
-	fmt.Printf(" \tKalimat dengan 1 tab\n")
-	// \n Untuk membuat new line
-	fmt.Printf("Ini adalah kalimat dengan 1 enter/new line \n")
-	// /"" Untuk membuat quote/petik dua
-	fmt.Printf("Nama saya \"Udin\"\n")
-	// \\ Untuk membuat backslash
-	fmt.Printf("\\ Ini adalah kalimat menggunakan backslash \\ \n")
-
-	// [VARIABLE]
-	// Di deklarasi dengan menggunakan keyword var
-	// Value dari variable dapat diubah2 selama masih menggunakan tipe data yang sama
-	// ! Variable wajib digunakan, jika ada variable yang unused/tidak digunakan maka akan muncul syntax error
-	var username string
-	username = "Jamal"
-	fmt.Printf("Nama saya %s \n", username)
-
-	var value int = 100
-	fmt.Printf("Nilai ulangan kemarin adalah %d \n", value)
-
-	// Deklarasi variable tanpa menuliskan tipe data
-	// Variable harus langsung diassign value dan tidak bisa diberikan default value kosong
-	var floatValue = 10.93
-	fmt.Printf("Nilai decimal: %f\n", floatValue)
-
-	// Multiple variable
-	var (
-		email  string
-		height float32
-		age    int = 30
-	)
-	email = "jumadi@google.com"
-	height = 175.12
-
-	fmt.Printf("Email saya %s, saya memiliki tinggi %f, dan saya berusia %d \n", email, height, age)
-
-	// One line multiple variable
-	// Bisa untuk bermacam2 tipe data
-	// Harus di assign value di awal
-	var value1, value2, value3 = 100, "Bambang", false
-	value2 = "Sumanto"
-	fmt.Printf("Saya %s, Umur %d, Gweh: %t \n", value2, value1, value3)
-
-	// Short hand variable
-	// ? Deklarasi variable seperti ini hanya bisa dilakukan di dalam function saja
-	price := 10000000
-	fmt.Printf("Harga barang ini sebesar %d \n", price)
-
-	// [CONSTANT]
-	// Variable yang nilainya konstan/tidak bisa diubah
-	// Deklarasi tanpa tipe data
-	// ? Kaidah penulisan const adalah dengan menggunakan huruf kapital semua
-	const MONTH = "January"
-
-	// Deklarasi dengan tipe data
-	const phi float32 = 3.14
-
-	// Multiple const variable
-	const (
-		title  string  = "Naruto"
-		rating float64 = 9.5
-	)
-
-	const NETWORK_NAME, ADDRESS_PORT = "BSCTestNet", 115511
-
-	// [POINTER]
-	// Biasa digunakan untuk menyimpan address/alamat dari suatu variable
-	// ! Yang disimpan hanyalah address/alamat, bukan value aslinya
-
-	var myPointer *int
-	var myPriceToPoint int = 15000
-	myPointer = &myPriceToPoint
-
-	fmt.Println("Address from pointer: ", myPointer) // Jika tidak menggunakan * maka akan menampilkan addressnya saja
-	fmt.Println("Value from pointer: ", *myPointer) // Jika menggunakan * akan menampilkan isi value dari variable yang dipoint
-
-	// -- Mengubah value melalui pointer --
-	myUserNameToPoint := "dionovan7"
-	var usernamePointer *string = &myUserNameToPoint
-	*usernamePointer = "kizaruu77" // ! Jangan lupa tambahkan * di pointer jika ingin mengubah value pada variable
-
-	fmt.Println("Pointed username: ", myUserNameToPoint)
-
-	// -- Zero value pada pointer --
-	// --- Deklarasi pointer menggunakan * ---
-	var myPointer1 *string
-	fmt.Printf("Value pointer1: %v \n", myPointer1)
-	// fmt.Printf("Value pointer1: %v \n", *myPointer1) // ? Jika tidak ada address, maka akan menyebabkan panic error
-
-	// --- Deklarasi menggunakan new() ---
-	var myPointer2 = new(bool) 
-	fmt.Printf("Value pointer2: %v \n", myPointer2)
-	fmt.Printf("Value pointer2: %v \n", *myPointer2) // ? Jika tidak ada address, maka value dari pointer akan memakai default zero value dari tiap tipe data  (int = 0, string = "", bool = false, etc)
-
-	// [ARITMATHIC OPERATION]
-	fmt.Printf("\n")
-	fmt.Printf("--- ARITMATHIC --- \n")
-
-	var sum = 10 + 30
+	// Memanggil func dengan multiple return
+	sum, subtract, times, divide := calculateValue(32, 10, 5.0, 3.5)
 	fmt.Println("Penjumlahan: ", sum)
-
-	var subtract = 10 - 2 
 	fmt.Println("Pengurangan: ", subtract)
+	fmt.Println("Perkalian: ", times)
+	fmt.Println("Pembagian: ", divide)
 
-	var perkalian = 20 * 2
-	fmt.Println("Perkalian: ", perkalian)
+	// -- Blank identifier --
+	// ? Digunakan jika hanya ingin memanggil return value yang dibutuhkan saja, yang tidak dibutuhkan bisa ditulis dengan _
+	usedSum, _, _, _ := calculateValue(10, 10, 0, 0)
+	fmt.Printf("Value yang digunakan %d \n", usedSum)
 
-	var pembagian float64 = 10.0 / 9.0
-	fmt.Println("Pembagian: ", pembagian)
+	_, message := generateGreeting("Bahlil")
+	fmt.Println(message)
+}
 
-	var modulus = 20 % 3
-	fmt.Println("Modulus: ", modulus)
+// -- Function Declaration --
+// ! func tidak bisa dideklarasikan di dalam func lain !
+func printHello() {
+	fmt.Println("Hello, Duniah")
+}
 
-	var incValue = 10
-	incValue++
-	fmt.Println("Increment: ", incValue)
+// -- Function with Parameter --
+func sumValue(value1 int, value2 int) {
+	sum := value1 + value2
+	fmt.Println("Sum value: ", sum)
+}
 
-	var decrementValue = 10
-	decrementValue--
-	fmt.Println("Increament: ", decrementValue)
+// -- Return Function --
+func generateMessage() string {
+	return "Hai, selamat datang di konoha"
+}
 
-	// -- Multiple Operation --
-	// ? Urutan => 1. Di dalam kurung, kali dan bagi, lalu kurang dan tambah
-	var myMultipleOperation = 10 + (5 - 2) * 30 / 2
-	fmt.Println("Multiple Operation: ", myMultipleOperation)
+// -- Return Function with Parameter --
+func calculateSpeed(velocity float64, gravity float64, time float64) string {
+	velocityTime := velocity * time
+	speed := velocityTime / gravity
 
-	// -- Operator Assignment --
-	var myValue int = 20
-	myValue += 5
-	fmt.Println("Plus assignment: ", myValue)
+	return fmt.Sprintf("Total speed is: %f", speed)
+}
 
-	myValue -= 3
-	fmt.Println("Subtract assignment: ", myValue)
+func getUsername(username string) string {
+	name := fmt.Sprintf("Welcome back, %s", username)
 
-	myValue *= 2
-	fmt.Println("Perkalian assignment: ", myValue)
+	return name
+}
 
-	myValue /= 5
-	fmt.Println("Pembagian assignment: ", myValue)
+//  -- Multiple Return Function --
+func calculateValue(value1 int, value2 int, value3 float64, value4 float64) (int, int, float64, float64) {
+	sum := value1 + value2
+	subtract := value1 - value2
+	times := value3 * value4
+	divide := value3 / value4
 
-	myValue %= 5
-	fmt.Println("Modulus assignment: ", myValue)
+	return sum, subtract, times, divide
+}
 
-	// -- Logical Operator --
-	var isValid bool = true
-	var isCorrect bool = false
-
-	fmt.Println(isValid || isCorrect)
-	fmt.Println(isValid && !isCorrect)
-
-	// -- Comparison Operator --
-	var myAnotherValue1 int = 50
-	var myAnotherValue2 int = 50
-	fmt.Println("== ", myAnotherValue1 == myAnotherValue2)
-	fmt.Println("!= ", myAnotherValue1 != myAnotherValue2)
-	fmt.Println("> ", myAnotherValue1 > myAnotherValue2)
-	fmt.Println(">= ", myAnotherValue1 >= myAnotherValue2)
-	fmt.Println("<= ", myAnotherValue1 <= myAnotherValue2)
-	fmt.Println("< ", myAnotherValue1 < myAnotherValue2)
-
-	// --- Comparison Using String ---
-	// ? Untuk pembandingan menggunakan tipe data string sebagai pembanding, yang akan dibandingkan adalah urutan lexical dari ACII
-	// ? Urutannya: 0-9 -> A-Z -> a-z
-	var comparedString1 string = "AkuSeorangKapiten"
-	var comparedString2 string = "mempunyaiPedangPanjang"
-	fmt.Println(comparedString1 > comparedString2)
-	fmt.Println(comparedString1 < comparedString2)
+// -- Named Return Function --
+// ? Memberikan nama pada return type
+// ? Jika return kosong, maka yang direturn adalah type yang sudah diberi nama
+// ? Jika menambahkan value lagi setelah return, maka type yang diberi nama akan ter-override
+func generateGreeting(name string) (greet string, message string) {
+	greet = fmt.Sprintf("Good morning, %s", name)
+	message = fmt.Sprintf("Semoga harimu menyenangkan yaa %s sayang", name)
+	return 
 }
