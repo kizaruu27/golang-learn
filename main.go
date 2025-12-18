@@ -45,6 +45,44 @@ func main() {
 
 	_, message := generateGreeting("Bahlil")
 	fmt.Println(message)
+
+	// Memanggil variadic function
+	// ? Ketika dipanggil bebas mau mengisi berapa parameter selama tipe datanya sama
+	printAll("Hallo", "Ujang", "Aku", "Gamteng")
+	// Memanggil variadic function yang membutuhkan parameter yang wajib
+	totalCalculation := calculateTotal(1, 2, 3, 4)
+	fmt.Println("Total calculation: ", totalCalculation)
+
+	// -- Anonymus function --
+	// ? Function ini di simpan dalam sebuah variable
+	var printHello = func(name string) {
+		fmt.Printf("Hello %s, welcome back!!!", name)
+	}
+
+	// ? Untuk memanggilnya menggunakan nama variablenya, dan memanggilnya seperti memanggil func seperti biasa
+	printHello("Bahlil")
+
+	getCode := func(name, address string) string {
+		message := fmt.Sprintf("%s%s", name, address)
+		return message
+	}
+	code := getCode("bambang", "13ABC")
+	fmt.Println("Code: ", code)
+
+	// -- Immedietly Invoke --
+	// ? Deklarasai function yang langsung dijalankan saat dia dideklarasi
+	// ? Metode ini sama seperti kita mengeksekusi sebuah func
+	// ! Hanya bisa dilakukan di dalam function !
+	func(name, address, email string) {
+		fmt.Printf("Nama: %s\n", name)
+		fmt.Printf("Address: %s\n", address)
+		fmt.Printf("Email: %s\n", email)
+	}("Bambang", "Jl. Ketupat No.67", "bambangketupat67@yahoo.com")
+
+	// ? Pemanggilan function yang membutuhkan function lain sebagai paramter
+	calculateNumber(10, 10, penjumlahan)
+	calculateNumber(10, 10, perkalian)
+	calculateNumber(10, 10, pembagian)
 }
 
 // -- Function Declaration --
@@ -78,7 +116,7 @@ func getUsername(username string) string {
 	return name
 }
 
-//  -- Multiple Return Function --
+// -- Multiple Return Function --
 func calculateValue(value1 int, value2 int, value3 float64, value4 float64) (int, int, float64, float64) {
 	sum := value1 + value2
 	subtract := value1 - value2
@@ -95,5 +133,49 @@ func calculateValue(value1 int, value2 int, value3 float64, value4 float64) (int
 func generateGreeting(name string) (greet string, message string) {
 	greet = fmt.Sprintf("Good morning, %s", name)
 	message = fmt.Sprintf("Semoga harimu menyenangkan yaa %s sayang", name)
-	return 
+	return
+}
+
+// -- Variadic Function --
+// ? Function yang menerima banyak parameter yang tidak dipatok
+// ? Paramter yang dikirimkan akan berupa array nantinya
+func printAll(words ...string) {
+	fmt.Println(words)
+}
+
+// Deklarasi variadic function yang membutuhkan paramter wajib
+// ? Ditambahkan paramter tambahan yg tidak menggunakan ...
+// ? Parameter variadic akan bersifat optional
+func calculateTotal(value1 int, value2 int, values ...int) (finalTotal int) {
+	total := value1 + value2
+
+	// Conventional For Loop
+	// for i := 0; i < len(values); i++ {
+	// 	total += values[i]
+	// }
+
+	// Short hand for loop
+	for _, i := range values {
+		total += i
+	}
+	finalTotal = total
+	return
+}
+
+// -- Function as Parameter --
+func penjumlahan(value1, value2 int) int {
+	return value1 + value2
+}
+
+func perkalian(value1, value2 int) int {
+	return value1 * value2
+}
+
+func pembagian(value1, value2 int) int {
+	return value2 / value1
+}
+
+func calculateNumber(value1, value2 int, calculator func(int, int) int) {
+	total := value1 * calculator(value1, value2)
+	fmt.Println("Hasil kalkulasi: ", total)
 }
