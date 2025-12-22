@@ -21,7 +21,43 @@ func devideValue(a, b int) (int, error) {
 	return total, nil
 }
 
+func configUsername(username string) string {
+	if username == "" {
+		// -- Panic Error --
+		// ? Sebuah error event yang akan menghentikan program jika dipanggil atau terjadi error
+		// ? Ketika panic dipanggil, maka program di bawahnya tidak akan dieksekusi
+		panic("username can't be an empty string")
+	}
+
+	return fmt.Sprintf("Selamat pagi, %s", username)
+}
+
 func main() {
+	// -- Recover panic error menggunakan defer func --
+	// ? fungsi defer digunakan untuk menandai sebuah func yang akan dieksekusi terakhir
+	// ? Bisa juga seperti callback dimana dia akan menunggu semua function dieksekusi, baru dia akan dieksekusi paling akhir
+	// ? Meskipun dia dituliskan paling awal, dia akan tetap dipanggil terakhir
+	defer func ()  {
+		// ? recover dapat memungkinkan program untuk dihentikan secara halus dan tidak secara paksa jika terjadi panic
+		// ? recover akan menangkap error panic message -> mirip seperti catch pada try catch
+		r := recover()
+		if r != nil {
+			fmt.Println("Error recovered:", r)
+		}
+	}()
+
+	// --- Urutan pemanggilan defer ---
+	// ? defer akan memanggil yang paling bawah terlebih dahulu, baru naik ke atas
+	defer fmt.Println("Defer 1") // ? Dijalankan ketiga
+	defer fmt.Println("Defer 2") // ? Dijalankan kedua
+	defer fmt.Println("Defer 3") // ? Dijalankan pertama
+
+	// ? Variable ini menggunakan panic error
+	// ? Jika error, maka program di bawahnya tidak akan dieksekusi
+	greet := configUsername("Yanto")
+	fmt.Println(greet)
+
+
 	value, err := devideValue(20, 0)
 
 	// ? Perlu mengecek apakah error yang direturn ada atau tidak
