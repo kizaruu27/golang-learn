@@ -3,12 +3,14 @@ package main
 import "fmt"
 
 func main() {
-	myString1, myString2 := "Selamat", "Kerja"
-	
-	// Perbandingan >
-	fmt.Printf("Perbandingan menggunakan \">\" : %t\n", myString1 > myString2)
-	// Perbandingan <
-	fmt.Printf("Perbandingan menggunakan \"<\" : %t\n", myString1 < myString2)
-	// Perbandingan =
-	fmt.Printf("Perbandingan menggunakan \"=\" : %t\n", myString1 == myString2)
+	sumTotal, _, _ := calculateAll(10, 10)
+	fmt.Println("Hasil penjumlahan:", sumTotal)
+}
+
+func calculateAll(a, b int) (int, int, int) {
+	penjumlahan := a + b
+	pengurangan := a - b
+	perkalian := a * b
+
+	return penjumlahan, pengurangan, perkalian
 }

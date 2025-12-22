@@ -3,11 +3,15 @@ package main
 import "fmt"
 
 func main() {
-	var stringPointer *string
-	var intPointer = new(int)
+	totalSumary := sumAll(4, 4, 4, 4)
+	fmt.Println("Hasil penjumlahan total:", totalSumary)
+}
 
-	fmt.Printf("Address stringPointer : %v\n", stringPointer)
-	fmt.Printf("Address intPointer : %v\n", intPointer)
+func sumAll(values ...int) int {
+	var total int
+	for i := 0; i < len(values); i++ {
+		total += values[i]
+	}
 
-	fmt.Printf("Value pointer: %v\n", *intPointer)
+	return total
 }
