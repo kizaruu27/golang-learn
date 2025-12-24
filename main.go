@@ -6,7 +6,7 @@ import (
 
 func main() {
 	// -- ARRAY --
-	var colors []string = []string {"Merah", "Kuning", "Hijau", "Biru", "Orange"}
+	var colors [5]string = [5]string {"Merah", "Kuning", "Hijau", "Biru", "Orange"}
 	// --- Short hand ---
 	numArr := [4]int {10, 20, 30, 40}
 	// -- Another array initiation --
@@ -14,7 +14,7 @@ func main() {
 	fmt.Println(usernames[2])
 	// -- Array initiation pada index tertentu
 	// ? Untuk index array yang tidak diisikan valuenya, maka secara default akan menggunakan zero value tergantung dari tipe data yang digunakan
-	var scores = []int {1: 100, 3: 85, 6: 70}
+	var scores = [...]int {1: 100, 3: 85, 6: 70}
 	// ? Untuk assign value pada index tertentu jika sebelumnya array sudah di inisiasi
 	scores[2] = 90
 	fmt.Println("Nilai scores:", scores[2])
@@ -26,7 +26,7 @@ func main() {
 	fmt.Println(categories)
 
 	// -- Array yang ditulis dalam beberapa baris --
-	rowedArr := []string {
+	rowedArr := [...]string {
 		"Bambang",
 		"Sumantao",
 		"Prabowo", // ! Wajib ada koma di value terakhir !
@@ -45,7 +45,7 @@ func main() {
 	fmt.Println(damages)
 
 	// -- Multidimention array --
-	multiDimensionArr := [][]string {
+	multiDimensionArr := [4][4]string {
 		{"Ujang", "Bambang", "Prabowo", "Subianto"},
 		{"Aji", "Gibran", "Suilistiyowati"},
 	}
