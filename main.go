@@ -1,161 +1,142 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
-	// -- ARRAY --
-	var colors []string = []string {"Merah", "Kuning", "Hijau", "Biru", "Orange"}
-	// --- Short hand ---
-	numArr := [4]int {10, 20, 30, 40}
-	// -- Another array initiation --
-	var usernames = [3]string {"Bambang", "Mulyono", "Sumantod"}
-	fmt.Println(usernames[2])
-	// -- Array initiation pada index tertentu
-	// ? Untuk index array yang tidak diisikan valuenya, maka secara default akan menggunakan zero value tergantung dari tipe data yang digunakan
-	var scores = []int {1: 100, 3: 85, 6: 70}
-	// ? Untuk assign value pada index tertentu jika sebelumnya array sudah di inisiasi
-	scores[2] = 90
-	fmt.Println("Nilai scores:", scores[2])
+	// --- Slice ---
+	var mySlice []string = []string {"Value 1", "Value 2", "Value 3"}
+	fmt.Println("Nilai mySlice:", mySlice)
+	fmt.Println("len() mySlice:", len(mySlice)) // ? Untuk mendapatkan length dari slice
+	fmt.Println("cap() mySlice:", cap(mySlice)) // ? Untuk mendapatkan capacity dari slice
 
-	// -- Array menggunakan elips --
-	// ? Value length pada array yang menyesuaikan dengan isinya
-	// ? Sebenarnya juga bisa tidak perlu diisi, karna panjang akan menyesuaikan dengan isinya
-	var categories = [...]string {"Makanan", "Minuman", "Baju"}
-	fmt.Println(categories)
+	// --- Slice dengan menggunakan make ---
+	// ? make membutuhkan 3 parameter pada umumnya => ([]tipeData, length, capacity)
+	// ? make juga bisa diberikan 2 parameter, nanti parameter ke-2 akan otomatis menjadi length dan capacity-nya
 
-	// -- Array yang ditulis dalam beberapa baris --
-	rowedArr := []string {
-		"Bambang",
-		"Sumantao",
-		"Prabowo", // ! Wajib ada koma di value terakhir !
-	}
-	fmt.Println(rowedArr)
+	// ---- make() menggunakan 3 parameter
+	var names []string = make([]string, 5, 7)
+	names[0] = "Sumanto"
+	names[1] = "Bambang"
+	names[2] = "Supriyanto"
+	names[3] = "Samsudin"
+	fmt.Println("Names:", names)
+	fmt.Println("len() Names:", len(names))
+	fmt.Println("cap() Names:", cap(names))
 
-	// --- len() ---
-	// ? len() digunakan untuk mendapatkan value berupa panjang dari sebuah array
-	valuesArr := [...]int {12, 12, 45, 60}
-	fmt.Println(len(valuesArr))
+	// ---- make() menggunakan 2 parameter 
+	myNumSlice := make([]int, 10) // jika valuenya blm diinisiasi, default value akan menggunakan zero value berdasarkan tipe data
+	fmt.Println("myNumSlice:", myNumSlice)
+	fmt.Println("len() myNumSlice:", len(myNumSlice))
+	fmt.Println("cap() myNumSlice:", cap(myNumSlice))
 
-	// -- Zero value pada array --
-	// ? Jika nilai pada suatu index kosong, maka secara default akan diisi oleh zero value berdasarkan zero value tiap tipe data
-	// ! Hanya bisa dilakukan jika panjang array sudah diinisiasikan
-	damages := [5]string {}
-	fmt.Println(damages)
+	// --- Zero value di slice ---
+	myZeroSlice := []string {}
+	fmt.Println("len() myZeroSlice:", len(myZeroSlice))
+	// fmt.Println(myZeroSlice[0])
+	myZeroSlice = append(myZeroSlice, "slice1", "slice2", "slice3")
+	fmt.Println("myZeroSlice:", myZeroSlice)
 
-	// -- Multidimention array --
-	multiDimensionArr := [][]string {
-		{"Ujang", "Bambang", "Prabowo", "Subianto"},
-		{"Aji", "Gibran", "Suilistiyowati"},
-	}
-	fmt.Println(multiDimensionArr[0][0])
+	// ---- Zero value slice menggunakan make()
+	usernames := make([]string, 0)
+	fmt.Println("len() usernames:", len(usernames))
+	// fmt.Println(usernames[0]) // ? Jika mengakses slice yang zero value, maka akan terjadi error karna panjangnya kosong
 
+	// --- Menambahkan value pada slice menggunakan append() ---
+	usernames = append(usernames, "kizaruu88", "bambang123", "supriyanto") // ? append harus dipanggil sebagai value (variable = append(variable, ..., ...))
+	fmt.Println("usernames:", usernames)
 
-	// -- FOR LOOP --
-	for i := 0; i < 3; i++ {
-		fmt.Printf("Value colors index ke %d : %s \n", i, colors[i])
-		fmt.Printf("Value numArr index ke %d : %d \n", i, numArr[i])
-	}
+	// --- Menambahkan slice ke slice lain menggunakan append() ---
+	myString1 := []string {"bambang", "sumanto", "yanto"}
+	myString2 := []string {"rahmat", "subagja"}
 
-	fmt.Printf("\n")
-	fmt.Printf("--For loop menggunakan len()-- \n")
+	myString1 = append(myString1, myString2...) // ? gunakan elips ketika menambahkan slice lain
+	fmt.Println("myString:", myString1)
 
-	// --- For loop menggunakan len() pada condition ---
-	// ? len() merupakan panjang dari sebuah array
-	for i := 0; i < len(colors); i++ {
-		fmt.Printf("Warna: %s\n", colors[i])
-	}
+	// ---- Membuat slice baru menggunakan append()
+	myNums := []int {10, 30, 40}
+	myUpdatedNums := append(myNums, 20, 50, 100) // ! Value tambahan harus memiliki tipe data yang sama
+	fmt.Println("myUpdatedNums:", myUpdatedNums)
 
-	fmt.Printf("\n")
-	fmt.Printf("--For loop menggunakan range-- \n")
-	// --- For loop menggunakan range ---
-	// ? range digunakan untuk shorthand dari perulangan
-	// ? range akan berisi value asli array dari tiap index
-	// ? i adalah index dari tiap value yg ada di dalam array
-	for i, value := range numArr {
-		fmt.Printf("Pada index ke-%d, bernilai %d\n", i, value)
-	}
+	// --- Memotong / Menghapus slice ---
+	warni := []string {"merah", "kuning", "hijau", "ungu"}
+	// ? angka pertama adalah mau potong dari index ke berapa
+	// ? angka kedua adalah mau potong sampai index ke berapa
+	// ! value pada index terakhir tidak akan ter-include
+	
+	warni = warni[0:3]
+	fmt.Println(warni)  
+	
+	// ! hati-hati karna di sini memotong slice yang sudah dipotong
+	warni = warni[1:2]
+	fmt.Println(warni)  
 
-	// ? Jika index tidak digunakan
-	for _, value := range numArr {
-		fmt.Printf("Value: %d\n", value)
-	}
+	// ---- Memotong slice dengan hanya 1 value
+	namaNama := []string {"Ujang", "Supriyanto", "Prabowo", "Anies"}
+	// ? jika : di depan, maka akan mengambil dari index paling awal
+	fmt.Println(namaNama[:2])
 
-	// ? Jika hanya index yang digunakan
-	for i := range numArr {
-		fmt.Printf("Index: %d\n", i)
-	}
+	// ? jika : di belakang, maka akan mengambil sampai index paling akhir
+	fmt.Println(namaNama[2:])
 
-	fmt.Println("--- For loop only condition ---")
-	// --- for loop hanya dengan kondisi ---
-	// ? Ini bentuk jika variable diinisiasikan
-	counter := 0
-	for counter != 10 {
-		fmt.Println("Counter:", counter)
-		counter++
-	}
+	// ? jika hanya menuliskan : saja, maka akan mengambil seluruh nilai dari slice
+	fmt.Println(namaNama[:])
 
-	// ? Ini bentuk jika loop hanya dengan condition, tapi variable diinisiasi di for loop
-	// ? tapi scopenya hanya bisa digunakan di dalam for itu sendiri
-	for index := 0; index < 5; { // ! hati-hati terjadi infinite loop
-		fmt.Println("Index:", index)
-		index++
-	}
+	// --- Memotong / menghapus nilai yang ada ditengah pada slice
+	// ? Menggunakan append jika ingin menghapus nilai yang ada di tengah slice
+	namaNama = append(namaNama[0:1], namaNama[2:]...)
+	fmt.Println(namaNama)
 
-	// --- For tanpa kondisi ---
-	// ? tidak menuliskan kondisi apapun pada for
-	// ? for seperti ini akan terus berjalan jika tidak ada break/kondisi yang menghentikanya. bahkan meskipun tidak iterasinya
-	index := 0
-	for {
-		if index < 10 {
-			break // break digunakan untuk menghentikan sebuah proses looping
-		}
+	// --- Membuat slice dari array ---
+	// ? Sebenarnya slice itu adalah sebuah pointer dari sebuah array
+	arrValues := [3]string {"Yanto", "Yanti", "Bambang"}
+	sliceValues := arrValues[:]
 
-		fmt.Println("New Index:", index)
-		index++
-	}
+	// ? jika mengubah value pada slice yang diberi nilai array yg sudah ada, maka nilai array juga akan ikut berubah
+	// ? konsepnya sama seperti pointer
+	arrValues[1] = "Sumanto" 
 
-	// --- for menggunakan continue dan break ---
-	newIndex := 0
-	for {
-		if newIndex % 2 != 0 {
-			newIndex++ // ! usahakan juga menulis post statement ketika menggunakan continue agar tidak nyangkut
-			continue // ? akan mengulang kembali perulangan dari awal
-		} else if newIndex == 10 {
-			fmt.Println("Looping berhenti di", newIndex)
-			break // ? menghentikan perulangan
-		}
+	fmt.Println("sliceValues: ", sliceValues)
+	fmt.Println("arrValues: ", arrValues)
 
-		fmt.Println("New Index:", newIndex)
-		newIndex++
-	}
+	// --- Realokasi slice ---
+	arrNames := [3]string {"Budi", "Yanto", "Rusdi"}
+	sliceNames := arrNames[:]
+	fmt.Println("cap() sliceNames before:", cap(sliceNames))
+	
+	sliceNames = append(sliceNames, "Susan", "Rahmat") // ? ketika sudah di re-alokasi menggunakan append(), maka array sudah tidak terhubung lagi dengan slice
+	fmt.Println("cap() sliceNames after:", cap(sliceNames))
 
-	myValue := 0
-	for {
-		if myValue % 2 == 0 {
-			myValue++
-			continue
-		} else if myValue > 9 {
-			fmt.Println("My value stops at:", myValue)
-			break
-		}
-		
-		fmt.Println("My Value:", myValue)
-		myValue++
-	}
+	fmt.Println("arrNames:", arrNames) // ? array tidak ikut bertambah meskipun value slice bertambah
+	fmt.Println("sliceNames:", sliceNames)
 
-	// -- Range pada string --
-	fmt.Println("--- Range pada string ---")
-	myString := "Dionovan"
-	fmt.Println(len(myString)) // ? Mengambil panjang pada string
+	// ? Capacity akan bertambah secara eksponensial ketika ada penambahan value pada slice
+	// ? Capacity tidak akan berkurang jika ada pengurangan pada value pada slice
+	// ! Sebaiknya capacity sudah ditentukan sejak awal
+	fmt.Println("")
+	fmt.Println("--- Realokasi slice capacity ---")
+	warnaWarni := make([]string, 10, 16)
+	warnaWarni = append(warnaWarni, "Merah") // ? append juga menambah length dari slice
+	fmt.Println("--- Merah ---")
+	fmt.Println("len() warna:", len(warnaWarni))
+	fmt.Println("cap() warna:", cap(warnaWarni))
 
-	for _, char := range myString {
-		fmt.Printf("Tipe dari %c, adalah %T\n", char, char)
+	warnaWarni = append(warnaWarni, "Biru")
+	fmt.Println("--- Biru ---")
+	fmt.Println("len() warna:", len(warnaWarni))
+	fmt.Println("cap() warna:", cap(warnaWarni))
 
-		if (char == 'v') {
-			fmt.Printf("Char mengandung %c, harus dihentikan\n", char)
-			break
-		}
-	}
+	warnaWarni = append(warnaWarni, "Kuning")
+	fmt.Println("--- Kuning ---")
+	fmt.Println("len() warna:", len(warnaWarni))
+	fmt.Println("cap() warna:", cap(warnaWarni))
+
+	warnaWarni = append(warnaWarni, "Jingga")
+	fmt.Println("--- Jingga ---")
+	fmt.Println("len() warna:", len(warnaWarni))
+	fmt.Println("cap() warna:", cap(warnaWarni))
+
+	warnaWarni = append(warnaWarni, "Marun")
+	fmt.Println("--- Marun ---")
+	fmt.Println("len() warna:", len(warnaWarni))
+	fmt.Println("cap() warna:", cap(warnaWarni))
 }
