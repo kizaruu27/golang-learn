@@ -2,110 +2,107 @@ package main
 
 import "fmt"
 
-type Siswa struct {
-	name string
-	address string
-	age int
-	score int
+// -- Interface --
+// ? Sebuah tipe data yang mendefinisikan bentuk function kosong
+type BangunRuang interface {
+	luas() float64
+	// ? Jika function ini ditambahkan ke interface, maka function ini wajib diimplementasikan pada struct
+	// ! Jika tidak diimplementasikan, maka struct akan dianggap tidak mengimplementasikan interface tersebut
+	// ! Sehingga tiap ada perubahan pada interface, maka struct juga harus berubah
+	// keliling() float64
 }
 
-type Computer struct {
-	cpuName string
-	core int
-	ram int
-	storage int
+// ? Solusi agar struct tidak harus selalu berubah, kita perlu menggunakan interface dengan function sesedikit mungkin untuk meminimalisir perubahan pada struct
+type Keliling interface {
+	keliling() float64
 }
 
-// --- Embeded Struct ---
-type SchoolResult struct {
-	Siswa // ? struct Siswa langsung diembed ke dalam struct SchoolResult
-	totalScore int
-	pass bool
+type Persegi struct {
+	sisi float64
 }
 
-type ComputerResult struct {
-	Computer
-	totalPrice int
-	qty int
+func (p Persegi) keliling() float64 {
+	return p.sisi * p.sisi * p.sisi
 }
 
-// -- function dengan struct --
-// ? Function ini akan menjadi bagian dari struct receivernya
-func (siswa Siswa) calculateScore() int {
-	return siswa.score * 100
+func hitungKeliling(keliling Keliling) {
+	fmt.Println(keliling.keliling())
 }
 
-func (comp Computer) calculatePrice() (int, int) {
-	return (comp.core + comp.storage + comp.ram) * 100, (comp.core + comp.storage + comp.ram) / 100
+// ? Struct yang memiliki format function yang sama, akan dianggap mengimplementasikan function dari suatu interface
+func (persegi Persegi) luas() float64 {
+	return persegi.sisi * persegi.sisi
 }
 
-// ? Function menggunakan pointer receiver -> berguna untuk mengubah value pada field sebuah struct
-// ? Jika tidak menggunakan pointer, maka data tidak bisa diubah
-func (siswa *Siswa) changeName(name string) {
-	siswa.name = name
+// ? interface bisa dijadikan parameter untuk memanggil function milik interface
+func hitungLuasPersegi(bangunRuang BangunRuang) float64 {
+	return bangunRuang.luas()
 }
 
-func (comp *Computer) editComputer(cpuName string, core int) {
-	comp.cpuName = cpuName
-	comp.core = core
+// --------------------------
+type RestaurantMenu interface {
+	price() int
+	menuType() string
+}
+
+type Food struct {
+	foodName    string
+	basePrice   int
+	composition string
+}
+
+func (f Food) price() int {
+	return f.basePrice * 14 / 100
+}
+
+func (f Food) menuType() string {
+	return fmt.Sprintf("Makanan ini mengandung %s", f.composition)
+}
+
+type Drink struct {
+	drinkName string
+	basePrice int
+	iced      bool
+}
+
+func (d Drink) price() int {
+	return d.basePrice * 4 / 100
+}
+
+func (d Drink) menuType() string {
+	if d.iced {
+		return "Minuman ini dingin"
+	} else {
+		return "Minuman ini panas"
+	}
+}
+
+func restoPrice(restoMenu RestaurantMenu) {
+	price := restoMenu.price()
+	fmt.Println("Price:", price)
+}
+
+func checkMenu(restoMenu RestaurantMenu) {
+	fmt.Println(restoMenu.menuType())
 }
 
 func main() {
-	// ? Jika iniasiasi struct tanpa menggunakan nama field, maka semua value dari field harus diisi dan harus berurutan
-	dataSiswa := Siswa{"Samsudin", "Jl. Mangga", 20, 80}
-	fmt.Println(dataSiswa.name)
-	fmt.Println(dataSiswa.address)
-	fmt.Println(dataSiswa.age)
-	fmt.Println(dataSiswa.score)
+	persegiPanjang := Persegi{sisi: 10}
 
-	fmt.Println("--- After change name ---")
-	dataSiswa.changeName("Gibran Subianto")
-	fmt.Println("Nama setelah dimodifikasi:", dataSiswa.name)
+	// ? Kita bisa memasukkan struct ke parameter function meskipun parameternya adalah interfacenya
+	// ! Ini hanya bisa dilakukan jika struct tersebut mengimplementasikan function dari interface
+	luasPersegi := hitungLuasPersegi(persegiPanjang)
 
-	calculatedScore := dataSiswa.calculateScore()
-	fmt.Println("Calculated score:", calculatedScore)
+	fmt.Println("Luas persegi panjang:", luasPersegi)
+	hitungKeliling(persegiPanjang)
 
-	// ? Jika inisiasi struct menggunakan nama field, maka bisa tidak mengisi semua field dan bisa tidak berurutan -> field yg kosong akan berisi zero value dari tipe data secara default
-	pcComponent := Computer{cpuName: "Intel", core: 12, ram: 32, storage: 128}
-	fmt.Printf("CPU: %s\nCore: %d\nRAM: %d\nStorage: %d\n", pcComponent.cpuName, pcComponent.core, pcComponent.ram, pcComponent.storage)
-	pcComponent.editComputer("AMD", 8)
-	
-	fmt.Println("--- Comp after modified ---")
-	fmt.Printf("CPU: %s\nCore: %d\nRAM: %d\nStorage: %d\n", pcComponent.cpuName, pcComponent.core, pcComponent.ram, pcComponent.storage)
+	food := Food{foodName: "Bakso", basePrice: 10000, composition: "Daging"}
+	drink := Drink{drinkName: "Es teh manis", basePrice: 2000, iced: true}
 
-	
-	maxPrice, _ := pcComponent.calculatePrice()
-	fmt.Println("Maximum pc price:", maxPrice)
+	restoPrice(food)
+	restoPrice(drink)
 
-	// --- Pointer struct ---
-	var pointerSiswa *Siswa = &Siswa{name: "Wahyu", score: 20}
-	fmt.Println((*pointerSiswa).name)
-	fmt.Println(pointerSiswa.score) // ? Tidak wajib menggunakan * ketika ingin mengakses nilai dari pointer struct
+	checkMenu(food)
+	checkMenu(drink)
 
-	// --- Anonymus struct ---
-	// ? Struct langsung disimpan di dalam variable dan langsung diisi nilainya di tiap field
-	tshirt := struct {
-		brand string
-		color string
-	} {
-		brand: "Uniqlo",
-		color: "red",
-	}
-	fmt.Println(tshirt.brand, tshirt.color)
-
-	schoolResult := SchoolResult{totalScore: 85, pass: true, Siswa: Siswa{name: "Prabowo", address: "Jl. Sawit", age: 19, score: 75}}
-	fmt.Println(schoolResult.Siswa.name)
-
-	computerResult := ComputerResult{totalPrice: 2000000, qty: 10, Computer: pcComponent}
-	fmt.Println(computerResult)
-
-	// -- Array of structs ---
-	computerArray := []Computer {
-		{cpuName: "AMD", core: 12, ram: 32},
-		{cpuName: "Intel", core: 8, ram: 16},
-	}
-	
-	for _, comp := range computerArray {
-		fmt.Printf("CPU: %s, core: %d, RAM: %d \n", comp.cpuName, comp.core, comp.ram)
-	}
 }
